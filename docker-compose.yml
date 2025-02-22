@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: task_manager
+    ports:
+      - "3306:3306"
+    networks:
+      - task_network
+
+  web:
+    build: .
+    command: python run.py
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - task_network
+
+networks:
+  task_network:
+    driver: bridge
